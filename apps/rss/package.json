@@ -1,0 +1,15 @@
+{
+  "name": "@ajou-bot/rss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/apps/rss/src/main.js",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "scripts": {
+    "dev": "tsc && node ./dist/apps/rss/src/main.js",
+    "prod": "node ./dist/apps/rss/src/main.js"
+  },
+  "author": "Jisu Sim <rlj1202@gmail.com>",
+  "license": "ISC"
+}

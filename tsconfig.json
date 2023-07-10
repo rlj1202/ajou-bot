@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+
+    "target": "ES2016",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "sourceMap": true,
+
+    "paths": {
+      "@ajou-bot/core": ["./packages/core/src"],
+      "@ajou-bot/core/*": ["./packages/core/src/*"]
+    }
+  }
+}
