@@ -4,6 +4,7 @@
   "description": "",
   "main": "./dist/apps/rss/src/main.js",
   "devDependencies": {
+    "@types/node": "^20.4.1",
     "typescript": "^5.1.6"
   },
   "scripts": {
@@ -11,5 +12,8 @@
     "prod": "node ./dist/apps/rss/src/main.js"
   },
   "author": "Jisu Sim <rlj1202@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "feed": "^4.2.2"
+  }
 }

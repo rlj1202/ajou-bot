@@ -4,6 +4,7 @@
   "description": "",
   "main": "./dist/packages/core/src/index.js",
   "scripts": {
+    "build": "tsc",
     "dev": "tsc && node ./dist/packages/core/src/index.js"
   },
   "author": "Jisu Sim <rlj1202@gmail.com>",
@@ -15,6 +16,7 @@
     "sanitize-html": "^2.11.0"
   },
   "devDependencies": {
+    "@types/node": "^20.4.1",
     "@types/qs": "^6.9.7",
     "@types/sanitize-html": "^2.9.0",
     "typescript": "^5.1.6"

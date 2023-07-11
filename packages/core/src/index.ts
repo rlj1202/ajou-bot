@@ -8,7 +8,7 @@ export interface Article {
   category: string;
   author: string;
   url: string;
-  date: string;
+  date: Date;
   htmlContents: string;
 }
 
@@ -22,7 +22,7 @@ async function getArticleContent(articleNo: string): Promise<string> {
         articleLimit: 10,
         "article.offset": 0,
       },
-    }
+    },
   );
 
   const $ = cheerio.load(resp.data);
@@ -43,7 +43,7 @@ export async function getNotices(): Promise<Article[]> {
         articleLimit: 10,
         "article.offset": 0,
       },
-    }
+    },
   );
 
   const $ = cheerio.load(resp.data);
@@ -51,7 +51,7 @@ export async function getNotices(): Promise<Article[]> {
 
   const total = parseInt(
     $("div.b-total-wrap > p > span").first().text().trim().match(/\d+/)?.[0] ||
-      "NaN"
+      "NaN",
   );
   console.log("Total:", total);
 
@@ -59,7 +59,7 @@ export async function getNotices(): Promise<Article[]> {
 
   $rows.each(function (i, elem) {
     const $notice = $(this).find(
-      "td.b-td-left > div.b-title-box > a > span.b-notice"
+      "td.b-td-left > div.b-title-box > a > span.b-notice",
     );
 
     const isNotice = $notice.length > 0;
@@ -92,9 +92,9 @@ export async function getNotices(): Promise<Article[]> {
           author: author,
           url: `https://www.ajou.ac.kr/kr/ajou/notice.do${link}`,
           htmlContents: htmlContent,
-          date: date,
+          date: new Date(date),
         };
-      })
+      }),
     );
   });
 
@@ -103,12 +103,6 @@ export async function getNotices(): Promise<Article[]> {
   return articles;
 }
 
-async function main() {
-  const articles = await getNotices();
-
-  for (const article of articles) {
-    console.log(article);
-  }
+export async function getSWNotices(): Promise<Article[]> {
+  return [];
 }
-
-main();
