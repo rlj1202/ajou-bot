@@ -2,14 +2,15 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import qs from "qs";
 import sanitizeHtml from "sanitize-html";
+import icovn from "iconv-lite";
 
 export interface Article {
   title: string;
-  category: string;
-  author: string;
+  category?: string;
+  author?: string;
   url: string;
   date: Date;
-  htmlContents: string;
+  htmlContents?: string;
 }
 
 async function getArticleContent(articleNo: string): Promise<string> {
@@ -111,5 +112,75 @@ export async function getNotices(): Promise<Article[]> {
 }
 
 export async function getSWNotices(): Promise<Article[]> {
-  return [];
+  const htmlContent = await axios
+    .get("http://software.ajou.ac.kr/bbs/board.php", {
+      params: {
+        tbl: "notice",
+        page: 1,
+      },
+      responseType: "arraybuffer",
+    })
+    .then((resp) => {
+      return icovn.decode(resp.data, "euc-kr");
+    })
+    .catch(() => {
+      throw new Error("failed to get sw article list");
+    });
+
+  const $ = cheerio.load(htmlContent);
+  const $row = $("div.conbody > table:nth-child(2) > tbody > tr");
+
+  const promises: Promise<Article>[] = [];
+
+  $row.each(function (i, elem) {
+    const $index = $(this).find("td.responsive01");
+
+    if (!$index.length) return;
+
+    const $title = $(this).find("td.responsive03 > a");
+    const link = $title.attr()?.href?.trim() || "";
+    const $date = $(this).find("td.responsive05");
+
+    const title = $title.text().trim();
+    const date = $date.text().trim();
+
+    const { num } = qs.parse(link, { ignoreQueryPrefix: true });
+
+    const url = `http://software.ajou.ac.kr/bbs/board.php?${qs.stringify({
+      tbl: "notice",
+      mode: "VIEW",
+      num: num,
+    })}`;
+
+    promises.push(
+      axios
+        .get(url, { responseType: "arraybuffer" })
+        .then((resp) => {
+          return icovn.decode(resp.data, "euc-kr");
+        })
+        .then((htmlContent) => {
+          const $ = cheerio.load(htmlContent);
+
+          return $("#DivContents").html()?.trim() || "";
+        })
+        .then((htmlContent) => {
+          return sanitizeHtml(htmlContent, {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+          });
+        })
+        .catch(() => "")
+        .then((htmlContent) => {
+          return {
+            title: title,
+            date: new Date(date),
+            url: url,
+            htmlContents: htmlContent,
+          };
+        }),
+    );
+  });
+
+  const articles = await Promise.all(promises);
+
+  return articles;
 }
