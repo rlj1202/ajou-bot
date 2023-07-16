@@ -2,12 +2,18 @@
   "name": "ajou-bot",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "preexport": "npm run build",
+    "export": "npm run export --workspaces --if-present",
+    "export:rss": "npm run export --workspace ./apps/rss",
+    "export:calendar": "npm run export --workspace ./apps/calendar"
+  },
   "author": "Jisu Sim <rlj1202@gmail.com>",
   "license": "ISC",
   "workspaces": [
-    "packages/core",
-    "apps/rss"
+    "packages/*",
+    "apps/*"
   ],
   "devDependencies": {
     "prettier": "3.0.0",

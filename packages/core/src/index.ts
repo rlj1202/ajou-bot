@@ -13,17 +13,18 @@ export interface Article {
 }
 
 async function getArticleContent(articleNo: string): Promise<string> {
-  const resp = await axios.get<string>(
-    "https://www.ajou.ac.kr/kr/ajou/notice.do",
-    {
+  const resp = await axios
+    .get<string>("https://www.ajou.ac.kr/kr/ajou/notice.do", {
       params: {
         mode: "view",
         articleNo: articleNo,
-        articleLimit: 10,
-        "article.offset": 0,
+        // articleLimit: 10,
+        // "article.offset": 0,
       },
-    },
-  );
+    })
+    .catch((err) => {
+      throw new Error("failed to get article content");
+    });
 
   const $ = cheerio.load(resp.data);
   let contentHtml = $("div.b-content-box > div.fr-view").html() || "";
@@ -35,16 +36,17 @@ async function getArticleContent(articleNo: string): Promise<string> {
 }
 
 export async function getNotices(): Promise<Article[]> {
-  const resp = await axios.get<string>(
-    "https://www.ajou.ac.kr/kr/ajou/notice.do",
-    {
+  const resp = await axios
+    .get<string>("https://www.ajou.ac.kr/kr/ajou/notice.do", {
       params: {
         mode: "list",
-        articleLimit: 10,
+        articleLimit: 20,
         "article.offset": 0,
       },
-    },
-  );
+    })
+    .catch((_err) => {
+      throw new Error("failed to get article list");
+    });
 
   const $ = cheerio.load(resp.data);
   const $rows = $("table.board-table > tbody > tr");
@@ -85,16 +87,21 @@ export async function getNotices(): Promise<Article[]> {
     const { articleNo } = qs.parse(link, { ignoreQueryPrefix: true });
 
     promises.push(
-      getArticleContent(articleNo as string).then((htmlContent) => {
-        return {
-          title: title,
-          category: category,
-          author: author,
-          url: `https://www.ajou.ac.kr/kr/ajou/notice.do${link}`,
-          htmlContents: htmlContent,
-          date: new Date(date),
-        };
-      }),
+      getArticleContent(articleNo as string)
+        .catch(() => "")
+        .then((htmlContent) => {
+          return {
+            title: title,
+            category: category,
+            author: author,
+            url: `https://www.ajou.ac.kr/kr/ajou/notice.do?${qs.stringify({
+              mode: "view",
+              articleNo,
+            })}`,
+            htmlContents: htmlContent,
+            date: new Date(date),
+          };
+        }),
     );
   });
 

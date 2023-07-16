@@ -2,7 +2,11 @@
   "name": "@ajou-bot/core",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/packages/core/src/index.js",
+  "main": "./dist/packages/core/src",
+  "exports": {
+    ".": "./dist/packages/core/src/index.js",
+    "./calendar": "./dist/packages/core/src/calendar.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc && node ./dist/packages/core/src/index.js"
@@ -12,6 +16,7 @@
   "dependencies": {
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
+    "ics": "^3.2.0",
     "qs": "^6.11.2",
     "sanitize-html": "^2.11.0"
   },

@@ -1,19 +1,19 @@
 {
-  "name": "@ajou-bot/rss",
+  "name": "@ajou-bot/calendar",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/apps/rss/src/main.js",
+  "main": "./dist/apps/calendar/src/main.js",
   "devDependencies": {
     "@types/node": "^20.4.1",
     "typescript": "^5.1.6"
   },
   "scripts": {
     "build": "tsc",
-    "export": "node ./dist/apps/rss/src/main.js"
+    "export": "node ./dist/apps/calendar/src/main.js"
   },
   "author": "Jisu Sim <rlj1202@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "feed": "^4.2.2"
+    "ics": "^3.2.0"
   }
 }
