@@ -18,6 +18,7 @@ async function main() {
     },
     updated: new Date(),
     generator: "ajou-bot",
+    favicon: "https://rlj1202.github.io/ajou-bot/favicon.png",
   });
 
   const articles = await getNotices();
