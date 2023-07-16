@@ -1,5 +1,20 @@
 # ajou-bot
 
+- 아주대학교 공지사항 RSS: https://rlj1202.github.io/ajou-bot/rss.xml
+- 아주대학교 학사일정 iCalendar: https://rlj1202.github.io/ajou-bot/calendar.ics
+
+## TODOs
+
+- [x] RSS
+  - [x] 아주대학교 공지사항
+  - [ ] 소프트웨어학과 공지사항
+  - [ ] 사이버보안학과 공지사항
+  - [ ] 디지털미디어학과 공지사항
+  - [ ] 기타 등등 학과 공지사항
+- [x] 아주대학교 학사일정 iCalendar
+  - [ ] 학사일정 2023년으로 고정되어 있는 것 수정
+- [ ] Discord Bot
+
 ## 참고
 
 - https://github.com/ajou-hack/notice-rss - 아주대학교 공지사항 게시판 RSS
