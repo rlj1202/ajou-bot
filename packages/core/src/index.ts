@@ -5,6 +5,7 @@ import sanitizeHtml from "sanitize-html";
 import icovn from "iconv-lite";
 
 export interface Article {
+  id: string;
   title: string;
   category?: string;
   author?: string;
@@ -56,7 +57,7 @@ export async function getNotices(): Promise<Article[]> {
     $("div.b-total-wrap > p > span").first().text().trim().match(/\d+/)?.[0] ||
       "NaN",
   );
-  console.log("Total:", total);
+  console.log(`Notice article total: ${total}`);
 
   const promises: Promise<Article>[] = [];
 
@@ -92,6 +93,7 @@ export async function getNotices(): Promise<Article[]> {
         .catch(() => "")
         .then((htmlContent) => {
           return {
+            id: articleNo as string,
             title: title,
             category: category,
             author: author,
@@ -171,6 +173,7 @@ export async function getSWNotices(): Promise<Article[]> {
         .catch(() => "")
         .then((htmlContent) => {
           return {
+            id: num as string,
             title: title,
             date: new Date(date),
             url: url,
