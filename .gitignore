@@ -5,3 +5,5 @@ dist
 *.ics
 
 .DS_Store
+
+*.env
