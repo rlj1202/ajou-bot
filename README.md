@@ -1,5 +1,7 @@
 # ajou-bot
 
+[![Export and deploy pages](https://github.com/rlj1202/ajou-bot/actions/workflows/export.yml/badge.svg)](https://github.com/rlj1202/ajou-bot/actions/workflows/export.yml)
+
 - 아주대학교 공지사항 RSS: https://rlj1202.github.io/ajou-bot/rss.xml
 - 아주대학교 소프트웨어학과 공지사항 RSS: https://rlj1202.github.io/ajou-bot/notice-sw.xml
 - 아주대학교 학사일정 iCalendar: https://rlj1202.github.io/ajou-bot/calendar.ics
