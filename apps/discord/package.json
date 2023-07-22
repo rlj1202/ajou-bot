@@ -1,0 +1,20 @@
+{
+  "name": "@ajou-bot/discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/apps/discord/src/main.js",
+  "devDependencies": {
+    "@types/node": "^20.4.1",
+    "typescript": "^5.1.6"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/apps/discord/src/main.js"
+  },
+  "author": "Jisu Sim <rlj1202@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/core": "^5.0.0",
+    "dotenv": "^16.3.1"
+  }
+}

@@ -4,10 +4,10 @@
   "description": "",
   "scripts": {
     "build": "npm run build --workspaces",
-    "preexport": "npm run build",
     "export": "npm run export --workspaces --if-present",
     "export:rss": "npm run export --workspace ./apps/rss",
-    "export:calendar": "npm run export --workspace ./apps/calendar"
+    "export:calendar": "npm run export --workspace ./apps/calendar",
+    "start:discord": "npm run start --workspace ./apps/discord"
   },
   "author": "Jisu Sim <rlj1202@gmail.com>",
   "license": "ISC",
