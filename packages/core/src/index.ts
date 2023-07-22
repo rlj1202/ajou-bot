@@ -187,3 +187,86 @@ export async function getSWNotices(): Promise<Article[]> {
 
   return articles;
 }
+
+export async function getSWCollegeNotices() {
+  const htmlContent = await axios
+    .get("https://sw.ajou.ac.kr/sw/board/notice.do", {
+      params: {
+        tbl: "notice",
+        page: 1,
+      },
+      responseType: "arraybuffer",
+    })
+    .then((resp) => {
+      return icovn.decode(resp.data, "utf-8");
+    })
+    .catch(() => {
+      throw new Error("failed to get sw article list");
+    });
+
+  const $ = cheerio.load(htmlContent);
+  const $row = $("table.board-table > tbody > tr");
+
+  const promises: Promise<Article>[] = [];
+
+  $row.each(function (i, elem) {
+    const $notice = $(this).find("span.b-notice");
+
+    if ($notice.length) {
+      // is notice
+    }
+
+    $notice.remove();
+
+    const $category = $(this).find("td + td").first();
+    const $title = $(this).find("div.b-title-box > a");
+    const link = $(this).find("div.b-title-box > a").attr()?.href || "";
+    const $department = $(this).find("td + td + td + td + td").first();
+    const $date = $(this).find("td + td + td + td + td + td").first();
+
+    const { articleNo } = qs.parse(link, { ignoreQueryPrefix: true });
+
+    const url = `https://sw.ajou.ac.kr/sw/board/notice.do?${qs.stringify({
+      mode: "view",
+      articleNo: articleNo,
+    })}`;
+
+    const title = $title.text().trim();
+    const date = $date.text().trim();
+    const department = $department.text().trim();
+    const category = $category.text().trim();
+
+    promises.push(
+      axios
+        .get(url, { responseType: "arraybuffer" })
+        .then((resp) => {
+          return icovn.decode(resp.data, "utf-8");
+        })
+        .then((htmlContent) => {
+          const $ = cheerio.load(htmlContent);
+
+          return $("div.b-content-box > div.fr-view").html()?.trim() || "";
+        })
+        .then((htmlContent) => {
+          return sanitizeHtml(htmlContent, {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+          });
+        })
+        .catch(() => "")
+        .then((htmlContent) => {
+          return {
+            id: `${articleNo}`,
+            title: title,
+            date: new Date(date),
+            url: url,
+            category: category,
+            htmlContents: htmlContent,
+          };
+        }),
+    );
+  });
+
+  const articles = await Promise.all(promises);
+
+  return articles;
+}

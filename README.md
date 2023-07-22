@@ -4,6 +4,7 @@
 
 - 아주대학교 공지사항 RSS: https://rlj1202.github.io/ajou-bot/rss.xml
 - 아주대학교 소프트웨어학과 공지사항 RSS: https://rlj1202.github.io/ajou-bot/notice-sw.xml
+- 아주대학교 소프트웨어융합대학 공지사항 RSS: https://rlj1202.github.io/ajou-bot/notice-sw-college.xml
 - 아주대학교 학사일정 iCalendar: https://rlj1202.github.io/ajou-bot/calendar.ics
 
 ## TODOs
@@ -11,6 +12,7 @@
 - [x] RSS
   - [x] 아주대학교 공지사항
   - [x] 소프트웨어학과 공지사항
+  - [x] 소프트웨어융합대학 공지사항
   - [ ] 사이버보안학과 공지사항
   - [ ] 디지털미디어학과 공지사항
   - [ ] 기타 등등 학과 공지사항
