@@ -44,7 +44,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISCORD_LAST_ARTICLE_NO: ${{ vars.DISCORD_LAST_ARTICLE_NO }}
-          DISCORD_WEBHOOK_TEST: $${{ secrets.DISCORD_WEBHOOK_TEST }}
+          DISCORD_WEBHOOK_TEST: ${{ secrets.DISCORD_WEBHOOK_TEST }}
 
   # Deployment job
   deploy:
