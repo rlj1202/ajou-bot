@@ -56,8 +56,6 @@ async function main() {
 
   const webhooks = [webhookTestUrl];
 
-  const promises = [];
-
   for (const article of newArticles) {
     const form = new FormData();
     form.append(
@@ -69,10 +67,10 @@ async function main() {
       "https://rlj1202.github.io/ajou-bot/discord-profile.png",
     );
 
-    promises.push(webhooks.map((url) => axios.post(url, form)));
-  }
+    const promises = webhooks.map((url) => axios.post(url, form));
 
-  await Promise.all(promises);
+    await Promise.all(promises);
+  }
 
   const lastArticleNo = articles[articles.length - 1].id;
   console.log(`Update discordLastArticleNo to ${lastArticleNo}`);
