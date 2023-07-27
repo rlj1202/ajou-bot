@@ -40,10 +40,16 @@ jobs:
         with:
           path: ./public
       # Discord webhook
+      - name: Generate a token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Run Discord Script
         run: npm run start:discord
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           DISCORD_LAST_ARTICLE_NO: ${{ vars.DISCORD_LAST_ARTICLE_NO }}
           DISCORD_WEBHOOK_TEST: ${{ secrets.DISCORD_WEBHOOK_TEST }}
         continue-on-error: true
