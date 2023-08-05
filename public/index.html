@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+  <head>
+    <title>아주대학교 공지사항 봇</title>
+
+    <style></style>
+  </head>
+  <body>
+    <script>
+      async function handleSubscribe() {
+        const webhookUrlInput = document.querySelector("#webhook-url");
+        if (!(webhookUrlInput instanceof HTMLInputElement)) return;
+
+        const url = webhookUrlInput.value;
+
+        const subscribeUrl =
+          "https://8e4dfsnfwb.execute-api.ap-northeast-2.amazonaws.com/subscribe";
+
+        try {
+          const resp = await fetch(subscribeUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url: url }),
+          });
+
+          console.log(resp);
+
+          if (resp.status === 201) {
+            alert("구독되었습니다");
+          } else {
+            alert("무언가 잘못되었습니다");
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      async function handleUnsubscribe() {
+        const webhookUrlInput = document.querySelector("#webhook-url");
+        if (!(webhookUrlInput instanceof HTMLInputElement)) return;
+
+        const url = webhookUrlInput.value;
+
+        const unsubscribeUrl =
+          "https://8e4dfsnfwb.execute-api.ap-northeast-2.amazonaws.com/unsubscribe";
+
+        try {
+          const resp = await fetch(unsubscribeUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url: url }),
+          });
+
+          console.log(resp);
+
+          if (resp.status === 200) {
+            alert("구독 취소되었습니다");
+          } else {
+            alert("무언가 잘못되었습니다");
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    </script>
+
+    <h1>🤖 아주대학교 공지사항 봇</h1>
+
+    <p>
+      아래에 디스코드 웹훅 url을 넣고 구독 혹은 구독 취소 버튼을 누르시면
+      됩니당.
+    </p>
+
+    <form>
+      <input
+        id="webhook-url"
+        placeholder="https://discord.com/api/webhooks/{webhook-id}/{webhook-token}"
+      />
+
+      <button type="button" onclick="handleSubscribe()">구독</button>
+      <button type="button" onclick="handleUnsubscribe()">구독 취소</button>
+    </form>
+
+    <p>문의: <a href="mailto:rlj1202@gmail.com">rlj1202@gmail.com</a></p>
+  </body>
+</html>
