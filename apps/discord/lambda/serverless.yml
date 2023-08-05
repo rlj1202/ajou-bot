@@ -1,0 +1,62 @@
+service: ajou-bot-discord
+frameworkVersion: "3"
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 4000
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-northeast-2
+  environment:
+    DYNAMODB_TABLE: "ajou-bot-discord-webhooks"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  subscribe:
+    handler: index.subscribe
+    events:
+      - httpApi:
+          path: /subscribe
+          method: post
+  unsubscribe:
+    handler: index.unsubscribe
+    events:
+      - httpApi:
+          path: /unsubscribe
+          method: post
+
+resources:
+  Resources:
+    AjouBotDiscordDynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        AttributeDefinitions:
+          - AttributeName: webhook-id
+            AttributeType: N
+          - AttributeName: webhook-token
+            AttributeType: S
+        KeySchema:
+          - AttributeName: webhook-id
+            KeyType: HASH
+          - AttributeName: webhook-token
+            KeyType: RANGE
