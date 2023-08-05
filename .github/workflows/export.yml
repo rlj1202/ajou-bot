@@ -52,6 +52,8 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           DISCORD_LAST_ARTICLE_NO: ${{ vars.DISCORD_LAST_ARTICLE_NO }}
           DISCORD_WEBHOOK_TEST: ${{ secrets.DISCORD_WEBHOOK_TEST }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         continue-on-error: true
 
   # Deployment job

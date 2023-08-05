@@ -1,15 +1,17 @@
 import axios from "axios";
 import { Octokit } from "@octokit/core";
+import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 
 import { getNotices } from "@ajou-bot/core";
 
 import "dotenv/config";
 
 const accessToken = process.env.GITHUB_TOKEN;
-const webhookTestUrl = process.env.DISCORD_WEBHOOK_TEST || "";
 const discordLastArticleNo = parseInt(
   process.env.DISCORD_LAST_ARTICLE_NO || "",
 );
+
+const tableName = "ajou-bot-discord-webhooks";
 
 if (!accessToken || accessToken.trim() === "") {
   console.log("Access token is not provided");
@@ -17,6 +19,10 @@ if (!accessToken || accessToken.trim() === "") {
 }
 
 const octokit = new Octokit({ auth: accessToken });
+
+const dynamoDbClient = new DynamoDBClient({
+  region: "ap-northeast-2",
+});
 
 async function setDiscordLastArticleNo(value: string) {
   await octokit.request(
@@ -31,6 +37,29 @@ async function setDiscordLastArticleNo(value: string) {
       },
     },
   );
+}
+
+async function getDiscordWebhookUrls(): Promise<string[]> {
+  const resp = await dynamoDbClient.send(
+    new ScanCommand({ TableName: tableName }),
+  );
+
+  if (!resp.Items) {
+    console.error("Failed to get webhook urls");
+    return [];
+  }
+
+  const webhooks = resp.Items.map((item) => ({
+    webhookId: item["webhook-id"].N,
+    webhookToken: item["webhook-token"].S,
+  }));
+
+  const webhookUrls = webhooks.map(
+    (item) =>
+      `https://discord.com/api/webhooks/${item.webhookId}/${item.webhookToken}`,
+  );
+
+  return webhookUrls;
 }
 
 async function main() {
@@ -54,7 +83,9 @@ async function main() {
     return;
   }
 
-  const webhooks = [webhookTestUrl];
+  const webhooks = await getDiscordWebhookUrls();
+
+  console.log(`${webhooks.length} webhook urls are found`);
 
   for (const article of newArticles) {
     const form = new FormData();
