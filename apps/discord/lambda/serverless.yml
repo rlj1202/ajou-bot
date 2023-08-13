@@ -5,6 +5,7 @@ plugins:
   - serverless-offline
 
 custom:
+  tableName: "ajou-bot-discord-webhooks-${sls:stage}"
   serverless-offline:
     httpPort: 4000
 
@@ -13,10 +14,11 @@ provider:
   runtime: nodejs18.x
   region: ap-northeast-2
   environment:
-    DYNAMODB_TABLE: "ajou-bot-discord-webhooks"
+    DYNAMODB_TABLE: ${self:custom.tableName}
   httpApi:
     payload: "2.0"
     cors: true
+    disableDefaultEndpoint: true
   iam:
     role:
       statements:
@@ -49,7 +51,7 @@ resources:
     AjouBotDiscordDynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        TableName: ${self:custom.tableName}
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

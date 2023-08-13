@@ -1,5 +1,10 @@
 {
   "name": "@ajou-bot/discord-lambda",
+  "scripts": {
+    "dev": "sls offline",
+    "deploy:dev": "sls deploy -s dev",
+    "deploy:prod": "sls deploy -s production"
+  },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.385.0"
   },
