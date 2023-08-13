@@ -11,7 +11,7 @@ const discordLastArticleNo = parseInt(
   process.env.DISCORD_LAST_ARTICLE_NO || "",
 );
 
-const tableName = "ajou-bot-discord-webhooks";
+const tableName = "ajou-bot-discord-webhooks-production";
 
 if (!accessToken || accessToken.trim() === "") {
   console.log("Access token is not provided");
